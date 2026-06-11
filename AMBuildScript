@@ -399,6 +399,9 @@ class ExtensionConfig(object):
 
     SdkHelpers.configureCxx(context, binary, sdk)
 
+    if '-Wno-nontrivial-memcall' in compiler.cflags:
+        compiler.cflags.remove('-Wno-nontrivial-memcall')
+
     return binary
 
   def AddCDetour(self, binary):
