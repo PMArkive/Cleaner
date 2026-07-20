@@ -12,7 +12,7 @@ CDetour *g_pDetour = 0;
 
 unordered_set<string> szStrings;
 
-#if SOURCE_ENGINE >= SE_LEFT4DEAD2
+#if defined(SIG_LINUX) || defined(SIG_WINDOWS)
 DETOUR_DECL_MEMBER4(Detour_LogDirect, LoggingResponse_t, LoggingChannelID_t, channelID, LoggingSeverity_t, severity, Color, color, const tchar *, pMessage)
 {
 	for (const auto& str : szStrings) {
@@ -85,7 +85,7 @@ bool Cleaner::SDK_OnLoad(char *error, size_t maxlength, bool late)
 	cleanerConfig.close();
 
 	// init our detours
-#if SOURCE_ENGINE >= SE_LEFT4DEAD2
+#if defined(SIG_LINUX) || defined(SIG_WINDOWS)
 #ifdef PLATFORM_WINDOWS
 	HMODULE tier0 = GetModuleHandle(TIER0_NAME);
 	void * fn = memutils->FindPattern(tier0, SIG_WINDOWS, SIG_WIN_SIZE);
