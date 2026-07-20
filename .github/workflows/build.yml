@@ -96,82 +96,37 @@ jobs:
           python -m pip install wheel
           pip install git+https://github.com/accelerator74/ambuild@nog3
 
-      - name: Checking out hl2sdk-l4d2
-        uses: actions/checkout@v7
-        with:
-          repository: alliedmodders/hl2sdk
-          ref: l4d2
-          path: hl2sdk-l4d2
+      - name: Checkout HL2SDKs
+        shell: bash
+        run: |
+          set -euo pipefail
 
-      - name: Checking out hl2sdk-l4d
-        uses: actions/checkout@v7
-        with:
-          repository: alliedmodders/hl2sdk
-          ref: l4d
-          path: hl2sdk-l4d
+          sdks=(
+            l4d2
+            l4d
+            css
+            tf2
+            csgo
+            hl2dm
+            dods
+            sdk2013
+            bms
+            insurgency
+            gmod
+            eye
+          )
 
-      - name: Checking out hl2sdk-css
-        uses: actions/checkout@v7
-        with:
-          repository: alliedmodders/hl2sdk
-          ref: css
-          path: hl2sdk-css
+          for sdk in "${sdks[@]}"; do
+            (
+              git clone \
+                --depth=1 \
+                --branch="$sdk" \
+                "https://github.com/alliedmodders/hl2sdk" \
+                "hl2sdk-$sdk"
+            ) &
+          done
 
-      - name: Checking out hl2sdk-tf2
-        uses: actions/checkout@v7
-        with:
-          repository: alliedmodders/hl2sdk
-          ref: tf2
-          path: hl2sdk-tf2
-
-      - name: Checking out hl2sdk-csgo
-        uses: actions/checkout@v7
-        with:
-          repository: alliedmodders/hl2sdk
-          ref: csgo
-          path: hl2sdk-csgo
-
-      - name: Checking out hl2sdk-hl2dm
-        uses: actions/checkout@v7
-        with:
-          repository: alliedmodders/hl2sdk
-          ref: hl2dm
-          path: hl2sdk-hl2dm
-
-      - name: Checking out hl2sdk-dods
-        uses: actions/checkout@v7
-        with:
-          repository: alliedmodders/hl2sdk
-          ref: dods
-          path: hl2sdk-dods
-
-      - name: Checking out hl2sdk-sdk2013
-        uses: actions/checkout@v7
-        with:
-          repository: alliedmodders/hl2sdk
-          ref: sdk2013
-          path: hl2sdk-sdk2013
-
-      - name: Checking out hl2sdk-bms
-        uses: actions/checkout@v7
-        with:
-          repository: alliedmodders/hl2sdk
-          ref: bms
-          path: hl2sdk-bms
-
-      - name: Checking out hl2sdk-insurgency
-        uses: actions/checkout@v7
-        with:
-          repository: alliedmodders/hl2sdk
-          ref: insurgency
-          path: hl2sdk-insurgency
-
-      - name: Checking out hl2sdk-gmod
-        uses: actions/checkout@v7
-        with:
-          repository: alliedmodders/hl2sdk
-          ref: gmod
-          path: hl2sdk-gmod
+          wait
 
       - name: Checking out hl2sdk-manifests
         uses: actions/checkout@v7
