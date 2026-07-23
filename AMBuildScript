@@ -128,6 +128,8 @@ class ExtensionConfig(object):
     else:
       self.mms_root = ResolveEnvPath('MMSOURCE112', 'mmsource-1.12')
       if not self.mms_root:
+        self.mms_root = ResolveEnvPath('MMSOURCE', 'metamod-source')
+      if not self.mms_root:
         self.mms_root = ResolveEnvPath('MMSOURCE_DEV', 'metamod-source')
       if not self.mms_root:
         self.mms_root = ResolveEnvPath('MMSOURCE_DEV', 'mmsource-central')
@@ -245,6 +247,9 @@ class ExtensionConfig(object):
             '-Wno-tautological-overlap-compare',
         ]
 
+    if cxx.version >= 'clang-21.0':
+        cxx.cflags += ['-Wno-uninitialized-const-pointer']
+
     if have_gcc:
       cxx.cflags += ['-mfpmath=sse']
       cxx.cflags += ['-Wno-maybe-uninitialized']
@@ -313,9 +318,9 @@ class ExtensionConfig(object):
 
   def configure_mac(self, cxx):
     cxx.defines += ['OSX', '_OSX', 'POSIX', 'KE_ABSOLUTELY_NO_STL']
-    cxx.cflags += ['-mmacosx-version-min=10.7']
+    cxx.cflags += ['-mmacosx-version-min=10.15']
     cxx.linkflags += [
-      '-mmacosx-version-min=10.7',
+      '-mmacosx-version-min=10.15',
       '-stdlib=libc++',
       '-lc++',
     ]
